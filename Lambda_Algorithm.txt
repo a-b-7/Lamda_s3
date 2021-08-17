@@ -1,0 +1,17 @@
+This is written by L009138
+Resource: Lambda
+Input: pre-Defined S3 Folder Structure
+Output: New post-Defined S3 Folder Structure
+
+Algorithm:
+
+# Input of an event / Dict with all pre-defined Bucket Name (22 march to 26 march)
+# Iteration on the event of lambda function
+# reading the bucket Name
+# getting the DATE from object using last modified
+# breaking the loop formatting the DATE
+# creating new bucket with DATE as key(name)
+# reading the data(objects) from source bucket
+# writing the data in new bucket
+# Iteration of the process till events ends
+
