@@ -1,0 +1,31 @@
+rPCPAppflowTransformationInvokeEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "EventRule to Fire PCP Appflow Data Tranformation lambda"
+      State: "ENABLED"
+      EventPattern:
+        source:
+          - "aws.s3"
+        detail:
+          eventName:
+            - "PutObject"
+          requestParameters:
+            bucketName:
+              - !Sub "lly-edp-raw-${​​​​pBucketPrefix}​​​​"
+            key:
+              - "prefix": "patient_connections_platform/data/inbound/incoming_data/consents/edb_ccm_pcp_consent_appflow/"
+              - "prefix": "patient_connections_platform/data/inbound/incoming_data/programs/edb_ccm_pcp_program_appflow/"
+              - "prefix": "patient_connections_platform/data/inbound/incoming_data/patients/edb_ccm_pcp_patient_appflow/"
+              - "prefix": "patient_connections_platform/data/inbound/incoming_data/case/edb_ccm_pcp_case_appflow/"
+              - "prefix": "patient_connections_platform/data/inbound/incoming_data/call_recordings/edb_ccm_pcp_call_recordings_appflow/"
+              - "prefix": "patient_connections_platform/data/inbound/incoming_data/caregivers/edb_ccm_pcp_caregiver_appflow/"
+      Targets:
+        - Arn: !GetAtt rPCPAppflowTransformation.Arn
+          Id: "PCPAppflowTransformFunctionTarget"
+  rPrmssnForEventsToInvokePCPAppflowLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt rPCPAppflowTransformation.Arn
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn: !GetAtt rPCPAppflowTransformationInvokeEventRule.Arn
